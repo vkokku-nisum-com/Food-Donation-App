@@ -12,7 +12,7 @@ export default class TrackDonationclass extends React.Component{
                 <View style={{alignItems:'center'}}>
                     <Button style={{borderRadius:30,paddingTop:10}} title="Cancel"/>
                 </View>
-                <Text style={{textAlign:'center',fontSize:20,fontFamily:'Roboto'}}>Your donation is being handled by:{user}</Text>
+                <Text style={{textAlign:'center',fontSize:20,fontFamily:'Roboto'}}></Text>
             </View>    
 
         );

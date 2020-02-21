@@ -11,7 +11,7 @@ const Taby=createMaterialTopTabNavigator({
     Add:{
         screen:AddDonationclass,
         navigationOptions:{
-            title:"Add Donation!"
+            title:"DONATE MEAL"
         }
     },
 

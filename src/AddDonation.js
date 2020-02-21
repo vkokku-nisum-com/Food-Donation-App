@@ -1,167 +1,161 @@
-
-import React, {Component} from 'react'; 
-import {Platform, StyleSheet, Text, View,TouchableOpacity,Button,ScrollView,Image} from 'react-native'; 
+import React, { Component } from 'react';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Button,
+  ScrollView,
+  Image,
+} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import DateTimePicker from "react-native-modal-datetime-picker";
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-import {KeyboardAvoidingView} from 'react-native';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
+import { KeyboardAvoidingView } from 'react-native';
 
-
-
-export default class AddDonationclass extends React.Component{
-    constructor(){
-        super()
-        this.state={
-            isDateTimePickerVisible: false,
-            units:'No.s',
-            foodItem:"",
-            quantity:"",
-            duration:"",
-            description:"",
-            donator:4,
-
-        }
-    }
-
-    showDateTimePicker = () => {
-        this.setState({ isDateTimePickerVisible: true });
+export default class AddDonationclass extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      address: '',
+      quantity: '',
+      description: '',
+      user: {},
+      user_id: '5e4e528958cff419236ae810',
+      ngo_id: '5e4d4587d2d6681301799297'
     };
-     
-    hideDateTimePicker = () => {
-        this.setState({ isDateTimePickerVisible: false });
-    };
-     
-    handleDatePicked = date => {
-        console.log("A date has been picked: ", date);
+  }
+
+  loadUser = () => {
+    fetch('http://13.233.155.46:3000/api/user_details', {
+      method: 'GET',
+    })
+      .then(response => response.json())
+      .then(res => {
         this.setState({
-            duration:date
-        })
-        this.hideDateTimePicker();
-    };
-     
+          user: res[0],
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
+  showDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: true });
+  };
 
+  hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false });
+  };
 
-    render(){
-        var data1 = [["No.s","Kgs","Litres"]]
-        var data2=[["Yes","No"]]
-        console.log(this.state)
-        return(
-            <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset="150" enabled>
-            <View style={styles.container}>
-                <View >
-                    <Text style={{fontSize:20,fontFamily:"Roboto",}}>Food Item :</Text>
-                    <TextInput style={{fontSize:20,fontFamily:"Roboto",}} value={this.state.foodItem} placeholder="Type here" onChangeText={
-                        (text)=>{this.setState({
-                            foodItem:text
-                        })}
-                    }/>
-                </View>
+  handleDatePicked = date => {
+    console.log('A date has been picked: ', date);
+    this.setState({
+      duration: date,
+    });
+    this.hideDateTimePicker();
+  };
 
-                <View >
-                    <Text style={{fontSize:20,fontFamily:"Roboto",}}>Quantity :</Text>
-                    <TextInput style={{fontSize:20,fontFamily:"Roboto",}}  value={this.state.quantity} placeholder="Type here" keyboardType='number-pad' onChangeText={
-                        (text)=>{
-                            this.setState({
-                                quantity:text
-                            })
-                        }
-                    }/>
-                    
-                </View>
+  onSubmit = () => {
+    this.props.navigation.navigate('DoneeList', {itemData:this.state});
+  };
 
-                <View >
-                    <Text style={{fontSize:20,fontFamily:"Roboto",}}>Select Unit :</Text>
-                    <Radiothingy/>
-                </View>
+  render() {
+    var data1 = [['No.s', 'Kgs', 'Litres']];
+    var data2 = [['Yes', 'No']];
+    this.loadUser();
+    console.log(this.state);
+    return (
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior="padding"
+        keyboardVerticalOffset="150"
+        enabled>
+        <View style={styles.container}>
+          <View>
+            <Text style={{ fontSize: 20, fontFamily: 'Roboto' }}>
+              Food Item :
+            </Text>
+            <TextInput
+              style={{ fontSize: 20, fontFamily: 'Roboto' }}
+              value={this.state.description}
+              placeholder="Type here"
+              onChangeText={text => {
+                this.setState({
+                  description: text,
+                });
+              }}
+            />
+          </View>
 
+          <View>
+            <Text style={{ fontSize: 20, fontFamily: 'Roboto' }}>
+              Quantity :
+            </Text>
+            <TextInput
+              style={{ fontSize: 20, fontFamily: 'Roboto' }}
+              value={this.state.quantity}
+              placeholder="Type here"
+              keyboardType="number-pad"
+              onChangeText={text => {
+                this.setState({
+                  quantity: text,
+                });
+              }}
+            />
+          </View>
 
-                <View>
-                    <Text style={{fontSize:20,fontFamily:"Roboto",}}>Usable Duration :</Text>
-                    <TouchableOpacity style={{backgroundColor:"#17a6ff",borderRadius:6, width:80}} onPress={this.showDateTimePicker}><Text style={{fontSize:15,fontFamily:"Roboto",color:"#ffffff"}}>Pick Time</Text></TouchableOpacity>
-                        <DateTimePicker
-                            isVisible={this.state.isDateTimePickerVisible}
-                            onConfirm={this.handleDatePicked}
-                            onCancel={this.hideDateTimePicker}
-                        />
-                </View>  
+          <View>
+            <Text style={{ fontSize: 20, fontFamily: 'Roboto' }}>
+              Enter Your Address :
+            </Text>
 
-                <View >
-                    <Text style={{fontSize:20,fontFamily:"Roboto",}}>Enter a brief description :</Text>
+            <TextInput
+              style={{ fontSize: 20, fontFamily: 'Roboto' }}
+              value={this.state.address}
+              placeholder="Add your Address"
+              onChangeText={text => {
+                this.setState({
+                  address: text,
+                });
+              }}
+            />
+          </View>
 
-                    <TextInput style={{fontSize:20,fontFamily:"Roboto",}} value={this.state.description} placeholder="Add a remark" onChangeText={
-                        (text)=>{
-                            this.setState({
-                                description:text
-                            })
-
-                        }
-                    }/>
-                </View>
-
-                <View style={{alignItems:'center'}}>
-                    <Button style={{borderRadius:15}} title="Submit"/>
-                </View>
-            
-            </View>
-            </KeyboardAvoidingView>
-            
-
-        );
-        
-    }
-
-}
-
-
-var radio_props = [
-    {label: 'No.s', value: 0 },
-    {label: 'Litre', value: 1 },
-    {label: 'Kg', value: 2 }
-];console.log(this.state)
-   
-class Radiothingy extends React.Component {
-    
-    getInitialState=function(){
-      return {
-        value: 0,
-      };
-    }
-
-    render(){
-      return (
-        <View>
-          <RadioForm
-            radio_props={radio_props}
-            initial={0}
-            onPress={(value) => {this.setState({value:value})}}
-          />
+          <View style={{ alignItems: 'center' }}>
+            <Button
+              style={{ borderRadius: 15 }}
+              onPress={this.onSubmit}
+              title="Search donee"
+            />
+          </View>
         </View>
-      );
-    }
+      </KeyboardAvoidingView>
+    );
+  }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 10,
+    backgroundColor: '#ffffff',
+    justifyContent: 'space-evenly',
 
+    //justifyContent: 'center',
+    //textAlign:'left',
 
+    paddingLeft: 20,
+  },
 
-const styles = StyleSheet.create({ 
-	container: { 
-        flex:1,
-        paddingTop:10,
-        backgroundColor: '#ffffff',
-        justifyContent:'space-evenly',
-        
-		//justifyContent: 'center', 
-		//textAlign:'left',
-       
-        paddingLeft:20, 
-        
-    },
-
-    viewy:{
-        flex:1,
-        justifyContent:"center",
-    }
-    
-   
-}); 
+  // viewy:{
+  //     flex:1,
+  //     justifyContent:"center",
+  // }
+});
